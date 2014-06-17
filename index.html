@@ -8,10 +8,7 @@
     
     <script type="text/javascript" src="matter-0.8.0.js" /></script>
     
-    
     <script>
-        
-        
         
         var Engine = Matter.Engine,
             World = Matter.World,
@@ -24,38 +21,54 @@
         window.addEventListener('load', init);
         
         function init() {
-            var engine = Engine.create(document.body);
+            var engine = Engine.create(document.body, {
+                render: {
+                    options: {
+                        background: 'images/background.png',
+                        wireframes: false
+                    }
+                }
+            });
         
             var mouse = MouseConstraint.create(engine, {
                 constraint: { stiffness: 1 }
             });
 
             var ground = Bodies.rectangle(395, 600, 815, 50, { 
-                isStatic: true
+                isStatic: true,
+                render: {
+                    visible: false
+                }
             });
-
-            var rock = Bodies.polygon(170, 450, 8, 20);
-
-            var anchor = { x:170, y:450 };
             
-            var elastic = Constraint.create({pointA:anchor, bodyB:rock, stiffness: 0.1});
+            var rockOptions = {
+                render: {
+                    sprite: {
+                        texture: 'images/rock.png'
+                    }
+                }
+            };
+
+            var rock = Bodies.polygon(170, 450, 8, 20, rockOptions),
+                anchor = { x:170, y:450 },
+                elastic = Constraint.create({pointA:anchor, bodyB:rock, stiffness: 0.1});
 
             var pyramid = Composites.pyramid(450, 300, 13, 10, 0, 0, function(x, y, column, row){
-               return Bodies.rectangle(x, y, 25, 40); 
+                var texture = column % 2 === 0 ? 'images/block.png' : 'images/block-2.png';
+                return Bodies.rectangle(x, y, 25, 40, { render: { sprite: { texture: texture } } }); 
             });
 
             World.add(engine.world, [mouse, ground, pyramid, rock, elastic]);
 
             Events.on(engine, 'tick', function(event) {
                 if(engine.input.mouse.button === -1 && rock.position.x > 190) {
-                    rock = Bodies.polygon(170, 450, 7, 20);
+                    rock = Bodies.polygon(170, 450, 7, 20, rockOptions);
                     World.add(engine.world, rock);
                     elastic.bodyB = rock;
                 }
             });
 
             Engine.run(engine);  
-            
         }
 
     </script>

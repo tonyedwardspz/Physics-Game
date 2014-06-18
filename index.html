@@ -44,14 +44,24 @@
             var rockOptions = {
                 render: {
                     sprite: {
-                        texture: 'images/rock.png'
+                        texture: 'images/turnip.png'
                     }
                 }
             };
 
-            var rock = Bodies.polygon(170, 450, 8, 20, rockOptions),
-                anchor = { x:170, y:450 },
-                elastic = Constraint.create({pointA:anchor, bodyB:rock, stiffness: 0.1});
+            var rock = Bodies.polygon(170, 450, 8, 20, rockOptions);
+            
+            var anchor = { x:170, y:450 };
+            
+            var elastic = Constraint.create({
+                pointA:anchor, 
+                bodyB:rock, 
+                stiffness: 0.1,
+                render: {
+                    lineWidth: 5,
+                    strokeStyle: '#dfa417'
+                }
+            });
 
             var pyramid = Composites.pyramid(450, 300, 13, 10, 0, 0, function(x, y, column, row){
                 var texture = column % 2 === 0 ? 'images/block.png' : 'images/block-2.png';

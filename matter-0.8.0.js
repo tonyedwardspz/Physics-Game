@@ -28,6 +28,13 @@
  * THE SOFTWARE.
  */
 
+
+
+
+var screenWidth = 1000;
+
+
+
 (function() {
 
 var Matter = {};
@@ -803,7 +810,7 @@ var World = {};
             gravity: { x: 0, y: 1 },
             bounds: { 
                 min: { x: 0, y: 0 }, 
-                max: { x: 800, y: 600 } 
+                max: { x: screenWidth, y: 600 } 
             }
         };
         
@@ -5071,7 +5078,7 @@ var Render = {};
             element: null,
             canvas: null,
             options: {
-                width: 800,
+                width: screenWidth,
                 height: 600,
                 background: '#fafafa',
                 wireframeBackground: '#222',
@@ -5944,7 +5951,7 @@ var RenderPixi = {};
             element: null,
             canvas: null,
             options: {
-                width: 800,
+                width: screenWidth,
                 height: 600,
                 background: '#fafafa',
                 wireframeBackground: '#222',
@@ -5967,7 +5974,7 @@ var RenderPixi = {};
         var render = Common.extend(defaults, options);
 
         // init pixi
-        render.context = new PIXI.WebGLRenderer(800, 600, render.canvas, false, true);
+        render.context = new PIXI.WebGLRenderer(screenWidth, 600, render.canvas, false, true);
         render.canvas = render.context.view;
         render.stage = new PIXI.Stage();
 

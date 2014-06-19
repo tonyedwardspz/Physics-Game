@@ -7,13 +7,15 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <script type="text/javascript" src="matter-0.8.0.js" /></script>
+    <script type="text/javascript" src="jQuery-1-1.js" /></script>
     
     <style>
     
         .button {
-            height:20;
-            width: 30;
+            height:30;
+            width: 60;
             display: inline-block;
+            border: 2px solid #555;
         }
     
     
@@ -29,24 +31,37 @@
             Constraint = Matter.Constraint,
             Composites = Matter.Composites,
             MouseConstraint = Matter.MouseConstraint,
-            Events = Matter.Events;           
+            Events = Matter.Events,
+            level = 1,
+            rungame,
+            alive = true;
             
-         window.addEventListener('load', init);
+        $(document).ready(function(e){
+            if (alive){
+                init();
+            }
         
-        // Level Select
-        var level = 1;
-        
-        function levelChange (){
-             level = document.getElementById('levelSelect');
+             var jgh = document.getElementById("level1");
+             jgh.onclick = bna;
+        function bna() {
+                level = 1;
             
-            //restart game
-            init();
-        }
+        document.removeChild(gameCanvas)
+                runGame();
+            }
+            document.getElementById('level2').click(function () {
+                level = 2;
+                runGame();
+            });
+            document.getElementById('level3').click(function () {
+                level = 3;
+                runGame();
+            });
+        });
+        
         
         
         function init() {
-            
-            
             
             // Engine options
             var gameCanvas = document.getElementById('canvasContainer');
@@ -125,12 +140,19 @@
                 }); 
             });
             
+            runGame = function(){
+                
+                Engine.clear(engine);
+                Engine.run(engine);
+                
+                if (level == 1){
+                    World.add(engine.world, [mouse, ground, pyramid, ground2, pyramid2, rock, elastic]);
+                }else if (level == 2){
+                    World.add(engine.world, [mouse, ground, pyramid, rock, elastic]);
+                }
+            };
             
-            if (level == 1){
-                World.add(engine.world, [mouse, ground, pyramid, ground2, pyramid2, rock, elastic]);
-            }else if (level == 2){
-                World.add(engine.world, [mouse, ground, pyramid, rock, elastic]);
-            }
+            runGame();
             
             Events.on(engine, 'tick', function(event) {
                 if(engine.input.mouse.button === -1 && rock.position.x > 190) {
@@ -138,9 +160,7 @@
                     World.add(engine.world, rock);
                     elastic.bodyB = rock;
                 }
-            });
-
-            Engine.run(engine);  
+            });  
         }
 
     </script>
@@ -149,11 +169,10 @@
 
 <body>
 
-    <div>
+    <div id="level1" class="button">Level 1</div>
+    <div id="level2" class="button">Level 2</div>
+    <div id="level3" class="button">Level 3</div>
     
-        
-    
-    </div>
     <div id="canvasContainer"></div>
     
 </body>

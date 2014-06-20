@@ -77,8 +77,14 @@
             var engine = Engine.create(gameCanvas, options);
         
             var mouse = MouseConstraint.create(engine, {
-                constraint: { stiffness: 1 }
+                constraint: { 
+                    stiffness: 1,
+                    render: {
+                        visible: false
+                    }
+                }
             });
+            
 
             var ground = Bodies.rectangle(500, 600, 1000, 50, { 
                 isStatic: true,
